@@ -8,15 +8,15 @@ import java.util.Scanner;
 public class CompoundInterestCalculator {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        float originalAmount;
+        float originalAmount = getOriginalAmount();
 
-        do {
+/*        do {
             System.out.print("Amount: ");
             originalAmount = getFloat();
 
             if(originalAmount <= 0)
                 System.out.println("Invalid input! Try again!");
-        }while (originalAmount <= 0);
+        }while (originalAmount <= 0);*/
 
         int periodLength;
         do {
@@ -33,6 +33,9 @@ public class CompoundInterestCalculator {
             System.out.print("Compound  frequency: ");
             compoundFrequency = scanner.next().charAt(0);
 
+            //Not the best idea to do it like this
+            //I would suggest integrating "compoundFrequency" validation in switch statement itself.
+            //For example: you could throw an exception in "default" clause and handle it here, inside the loop
             if(compoundFrequency == 'D' || compoundFrequency == 'W' || compoundFrequency == 'M' || compoundFrequency == 'Q' || compoundFrequency == 'H' ||
                     compoundFrequency == 'Y' )
                 break;
@@ -106,6 +109,9 @@ public class CompoundInterestCalculator {
                 return 1;
         }
     }
+
+    //This is seems to be a "half-baked" solution (sorry for the expression :) )
+    //You currently have loop inside a loop, which is actually not really necessary since same error message should be show in both case (when input is not int and value is not within a valid range)
     private static int getInt() {
         while(true){
             try {
@@ -123,6 +129,25 @@ public class CompoundInterestCalculator {
             } catch(NumberFormatException ne) {
                 System.out.println("Invalid input! Try again!");
             }
+        }
+    }
+
+    //Here is somewhat a more compact way of getting valid "originalAmount"
+    private static float getOriginalAmount() {
+        Scanner scanner = new Scanner(System.in);
+        
+        while (true) {
+            System.out.print("Amount: ");
+
+            try {
+                float originalAmount = Float.parseFloat(scanner.next());
+
+                if (originalAmount > 0) {
+                    return originalAmount;
+                }
+            } catch (NumberFormatException ignored){}
+
+            System.out.println("Invalid input! Try again!");
         }
     }
 }
